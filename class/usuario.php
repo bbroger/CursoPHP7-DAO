@@ -87,6 +87,7 @@
 	        return $this;
 	    }
 
+	    //METODOS PARA PESQUISA
 	    //metodo que retorna um usuário a partir do ID
 
 	    public function loadById($id){
@@ -103,10 +104,7 @@
 
 	    		$row = $results[0];
 
-	    		$this -> setIdusuario($row['idusuario']);
-	    		$this -> setDeslogin($row['deslogin']);
-	    		$this -> setDessenha($row['dessenha']);
-	    		$this -> setDtcadastro(new DateTime($row['dtcadastro']));
+	    		$this -> setData($results[0]);
 	    	}
 
 	    }
@@ -152,15 +150,24 @@
 
 	    		$row = $results[0];
 
-	    		$this -> setIdusuario($row['idusuario']);
-	    		$this -> setDeslogin($row['deslogin']);
-	    		$this -> setDessenha($row['dessenha']);
-	    		$this -> setDtcadastro(new DateTime($row['dtcadastro']));
+	    		$this -> setData($results[0]);
+	    		
 	    	} else {
 
 	    		throw new Exception("Login ou senha inválidos");
 	    		
 	    	}
+	    }
+
+	    //metodo para receber os resultados das query
+
+	    public function setData($dados){
+
+	    		$this -> setIdusuario($dados['idusuario']);
+	    		$this -> setDeslogin($dados['deslogin']);
+	    		$this -> setDessenha($dados['dessenha']);
+	    		$this -> setDtcadastro(new DateTime($dados['dtcadastro']));
+
 	    }
 
 	    //metodo para imprimir os dados da pesquisa em formato de String
@@ -173,6 +180,53 @@
 	    		"deslogin" => $this -> getDeslogin(),
 	    		"dessenha" => $this -> getDessenha(),
 	    		"dtcadastro" => $this -> getDtcadastro() -> format("d/m/Y H:i:s")
+
+	    	));
+	    }
+
+	    //METODO INSERT
+
+	    //metodo para inserir dados no banco de dados
+
+	    public function insert(){
+
+	    	$sql = new Sql();
+
+	    	$results = $sql -> select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+
+	    		':LOGIN' => $this -> getDeslogin(),
+	    		':PASSWORD' => $this -> getDessenha()
+
+	    	));
+
+	    	if (count($results) > 0) {
+
+	    		$this -> setData($results[0]);
+	    	}
+	    }
+
+	    //inserção de dados no banco e apresentação das informações na tela por meio de metodo construtor
+
+	    public function __construct($login = "", $password = ""){
+
+	    	$this -> setDeslogin($login);
+	    	$this -> setDessenha($password);
+	    }
+
+	    //METODO UPDATE
+
+	    public function update($login, $password){
+
+	    	$this -> setDeslogin($login);
+	    	$this -> setDessenha($password);
+
+	    	$sql = new Sql();
+
+	    	$sql -> query ("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+
+	    		':LOGIN' => $this -> getDeslogin(),
+	    		':PASSWORD' => $this -> getDessenha(),
+	    		':ID' => $this -> getIdusuario()
 
 	    	));
 	    }

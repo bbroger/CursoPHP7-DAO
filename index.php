@@ -21,13 +21,26 @@
 	echo json_encode($list1);*/
 
 	//carrega um usuário que tenha o login e senha validados
-	$usuario = new Usuario();
-
+	/*$usuario = new Usuario();
 	$usuario -> login("teste", "teste");
+	echo $usuario;*/
+
+	//inserção de dados no banco e apresentação das informações na tela
+	/*$aluno = new Usuario();
+	$aluno -> setDeslogin("aluno");
+	$aluno -> setDessenha("123");
+	$aluno -> insert();
+	echo $aluno;*/
+
+	//inserção de dados no banco e apresentação das informações na tela por meio de metodo construtor
+	/*$aluno = new Usuario("maisumaluno", "123456");
+	$aluno -> insert();
+	echo $aluno;*/
+
+	//alterando os dados de usuario
+	$usuario = new Usuario();
+	$usuario -> loadbyId(16);
+	$usuario -> update("professor", "professor");
 
 	echo $usuario;
-
-
-
-
 ?>
