@@ -38,9 +38,16 @@
 	echo $aluno;*/
 
 	//alterando os dados de usuario
-	$usuario = new Usuario();
+	/*$usuario = new Usuario();
 	$usuario -> loadbyId(16);
 	$usuario -> update("professor", "professor");
+	echo $usuario;*/
+
+	//excluindo os dados de usuario
+
+	$usuario = new usuario();
+	$usuario -> loadbyId(13);
+	$usuario -> delete();
 
 	echo $usuario;
 ?>
